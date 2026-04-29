@@ -1,0 +1,109 @@
+# -----------------------------------------------------------
+# STEP 1: Define an Undirected Graph using Adjacency List
+# -----------------------------------------------------------
+
+# Each key represents a node (vertex)
+# Each value is a list of nodes connected to it (edges)
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F'],
+    'D': ['B'],
+    'E': ['B', 'F'],
+    'F': ['C', 'E']
+}
+
+# Print the graph structure
+print("Undirected Graph Representation:")
+for node in graph:
+    print(node, "->", graph[node])
+
+
+# -----------------------------------------------------------
+# STEP 2: Depth First Search (DFS) - Recursive Implementation
+# -----------------------------------------------------------
+
+def dfs(graph, node, visited=None):
+    """
+    Recursive DFS function
+
+    graph   : adjacency list representation of graph
+    node    : current node to visit
+    visited : set to keep track of visited nodes
+    """
+
+    # If visited set is not provided, create a new empty set
+    if visited is None:
+        visited = set()
+
+    # Mark the current node as visited
+    visited.add(node)
+
+    # Print the node
+    print(node, end=' ')
+
+    # Visit all neighbors of the current node
+    for neighbor in graph[node]:
+        # If neighbor is not visited, recursively call DFS
+        if neighbor not in visited:
+            dfs(graph, neighbor, visited)
+
+    # Return visited nodes (optional, useful for checking)
+    return visited
+
+
+# Call DFS starting from node 'A'
+print("\n\nDFS Traversal starting from 'A':")
+visited_dfs = dfs(graph, 'A')
+
+# Print visited nodes set
+print("\nVisited Nodes (DFS):", visited_dfs)
+
+
+# -----------------------------------------------------------
+# STEP 3: Breadth First Search (BFS) - Using Queue
+# -----------------------------------------------------------
+
+from collections import deque   # deque is used as a queue
+
+def bfs(graph, start_node):
+    """
+    BFS function using queue
+
+    graph      : adjacency list
+    start_node : node to start traversal
+    """
+
+    visited = set()      # To keep track of visited nodes
+    queue = deque()      # Queue for BFS (FIFO)
+
+    # Mark the start node as visited and enqueue it
+    visited.add(start_node)
+    queue.append(start_node)
+
+    # Loop until queue becomes empty
+    while queue:
+        # Remove a node from the front of the queue
+        node = queue.popleft()
+
+        # Print the node
+        print(node, end=' ')
+
+        # Visit all neighbors of the node
+        for neighbor in graph[node]:
+            # If neighbor is not visited
+            if neighbor not in visited:
+                visited.add(neighbor)     # Mark as visited
+                queue.append(neighbor)   # Add to queue
+
+    # Return visited nodes
+    return visited
+
+
+# Call BFS starting from node 'A'
+print("\n\nBFS Traversal starting from 'A':")
+visited_bfs = bfs(graph, 'A')
+
+# Print visited nodes set
+print("\nVisited Nodes (BFS):", visited_bfs)
