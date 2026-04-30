@@ -1,0 +1,43 @@
+# Import required library
+import random   # Used to select random responses
+
+# Define bot's responses using a dictionary
+responses = {
+    "hi": ["Hello!", "Hi there!", "Hi! How can I assist you?"],
+    "bye": ["Goodbye!", "See you later!", "Bye! Have a great day."],
+    "how are you": ["I'm fine!", "Doing great!", "I'm just a bot, but I'm good!"],
+    "default": [
+        "I'm sorry, I didn't understand what you meant. Can you please rephrase?",
+        "I'm not sure what you mean. Could you please provide more context?"
+    ]
+}
+
+# Function to generate bot response
+def get_bot_response(user_message):
+    # Check if user input matches any key in dictionary
+    if user_message in responses:
+        # Return a random response from the list
+        return random.choice(responses[user_message])
+    else:
+        # Return default response if input not found
+        return random.choice(responses["default"])
+
+
+# Start chatbot conversation
+while True:
+    # Take input from user
+    user_message = input("You: ")
+
+    # Convert input to lowercase for consistency
+    user_message = user_message.lower()
+
+    # Exit condition
+    if user_message == "quit":
+        print("Bot: Goodbye!")
+        break
+
+    # Get response from function
+    bot_response = get_bot_response(user_message)
+
+    # Display bot response
+    print("Bot:", bot_response)
