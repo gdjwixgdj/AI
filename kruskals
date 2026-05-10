@@ -1,0 +1,348 @@
+# ==========================================
+# KRUSKAL'S ALGORITHM WITHOUT LAMBDA
+# ==========================================
+
+
+# Graph class
+class Graph:
+
+
+    # --------------------------------------
+    # CONSTRUCTOR
+    # Runs automatically when object created
+    # --------------------------------------
+    def __init__(self, vertices):
+
+        # Store number of vertices
+        # Example: 4
+        self.V = vertices
+
+
+        # Empty list to store edges
+        # Format: [source, destination, weight]
+        self.graph = []
+
+
+
+    # --------------------------------------
+    # FUNCTION TO ADD EDGE
+    # --------------------------------------
+    def addEdge(self, u, v, w):
+
+        # Add edge into graph list
+        self.graph.append([u, v, w])
+
+
+
+    # --------------------------------------
+    # FUNCTION TO RETURN WEIGHT
+    # Used for sorting
+    # --------------------------------------
+    def getWeight(self, item):
+
+        # item = [u,v,w]
+
+        # Return weight
+        # index 2 = weight
+        return item[2]
+
+
+
+    # --------------------------------------
+    # FIND ROOT PARENT
+    # Using recursion
+    # --------------------------------------
+    def find(self, parent, i):
+
+        # If node is its own parent
+        if parent[i] == i:
+            return i
+
+
+        # Otherwise check parent's parent
+        return self.find(parent, parent[i])
+
+
+
+    # --------------------------------------
+    # UNION OF TWO SETS
+    # --------------------------------------
+    def union(self, parent, x, y):
+
+        # Make y parent of x
+        parent[x] = y
+
+
+
+    # --------------------------------------
+    # MAIN KRUSKAL FUNCTION
+    # --------------------------------------
+    def KruskalMST(self):
+
+
+        # Store final MST edges
+        result = []
+
+
+        # Edge index for sorted graph
+        i = 0
+
+
+        # Count of edges in MST
+        e = 0
+
+
+
+        # ----------------------------------
+        # SORT EDGES BY WEIGHT
+        # ----------------------------------
+        self.graph.sort(key=self.getWeight)
+
+
+        # Example before sorting:
+        # [0,1,10]
+        # [0,2,6]
+        # [0,3,5]
+        # [1,3,15]
+        # [2,3,4]
+
+        # After sorting:
+        # [2,3,4]
+        # [0,3,5]
+        # [0,2,6]
+        # [0,1,10]
+        # [1,3,15]
+
+
+
+        # ----------------------------------
+        # CREATE PARENT ARRAY
+        # ----------------------------------
+        parent = []
+
+
+        # Initially every node
+        # is parent of itself
+        for node in range(self.V):
+
+            # Example:
+            # [0,1,2,3]
+            parent.append(node)
+
+
+
+        # ----------------------------------
+        # MAIN LOOP
+        # Need V-1 edges
+        # ----------------------------------
+        while e < self.V - 1:
+
+
+
+            # Get next minimum edge
+            u, v, w = self.graph[i]
+
+
+            # Move to next edge
+            i += 1
+
+
+
+            # Find root parent of source
+            x = self.find(parent, u)
+
+
+            # Find root parent of destination
+            y = self.find(parent, v)
+
+
+
+            # If roots are different
+            # no cycle
+            if x != y:
+
+
+                # Increase edge count
+                e += 1
+
+
+                # Add edge to MST
+                result.append([u, v, w])
+
+
+                # Merge both sets
+                self.union(parent, x, y)
+
+
+
+        # ----------------------------------
+        # CALCULATE TOTAL COST
+        # ----------------------------------
+        cost = 0
+
+
+        print("Edges in MST:\n")
+
+
+
+        for u, v, w in result:
+
+
+            # Add edge weight
+            cost += w
+
+
+            # Print edge
+            print(u, "--", v, "==", w)
+
+
+
+        # Print total cost
+        print("\nMinimum Cost =", cost)
+
+
+
+
+# ==========================================
+# DRIVER CODE
+# ==========================================
+
+
+# Create graph with 4 vertices
+g = Graph(4)
+
+
+# Add edges
+g.addEdge(0, 1, 10)
+g.addEdge(0, 2, 6)
+g.addEdge(0, 3, 5)
+g.addEdge(1, 3, 15)
+g.addEdge(2, 3, 4)
+
+
+# Call Kruskal
+g.KruskalMST()
+
+
+
+
+# ==========================================
+# IMPORTANT VIVA QUESTIONS
+# ==========================================
+
+
+# Q1. What is Kruskal's algorithm?
+# Ans:
+# It is a greedy algorithm used
+# to find Minimum Spanning Tree.
+
+
+# Q2. What is MST?
+# Ans:
+# Minimum Spanning Tree connects
+# all vertices with minimum cost
+# and no cycle.
+
+
+# Q3. Why greedy algorithm?
+# Ans:
+# Because smallest edge is chosen first.
+
+
+# Q4. Why sorting is needed?
+# Ans:
+# To get minimum weight edges first.
+
+
+# Q5. What does this line do?
+# self.graph.sort(key=self.getWeight)
+#
+# Ans:
+# Sorts edges according to weight.
+
+
+# Q6. What does getWeight() do?
+# Ans:
+# Returns weight of edge.
+
+
+# Q7. What is edge format?
+# Ans:
+# [source, destination, weight]
+
+
+# Example:
+# [0,1,10]
+
+
+# Q8. What is parent array?
+# Ans:
+# Stores parent of each node.
+
+
+# Example:
+# [0,1,2,3]
+
+
+# Q9. Why find() is used?
+# Ans:
+# To find root parent.
+
+
+# Q10. Why recursion in find()?
+# Ans:
+# To keep moving upward
+# until root found.
+
+
+# Q11. What does union() do?
+# Ans:
+# Merges two sets.
+
+
+# Q12. Why x != y?
+# Ans:
+# Different roots means no cycle.
+
+
+# Q13. What if x == y?
+# Ans:
+# Cycle formed, edge rejected.
+
+
+# Q14. Why V-1 edges?
+# Ans:
+# Spanning tree always has V-1 edges.
+
+
+# Q15. Time complexity?
+# Ans:
+# O(E log E)
+
+
+# Q16. What is self?
+# Ans:
+# Refers to current object.
+
+
+# Q17. What is __init__()?
+# Ans:
+# Constructor in Python.
+
+
+# Q18. What is result list?
+# Ans:
+# Stores final MST edges.
+
+
+# Q19. What is cost variable?
+# Ans:
+# Stores total MST cost.
+
+
+# Q20. Output of this program?
+# Ans:
+# 2 -- 3 == 4
+# 0 -- 3 == 5
+# 0 -- 1 == 10
+# Minimum Cost = 19
