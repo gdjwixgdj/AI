@@ -1,0 +1,262 @@
+# ============================================================
+# PROGRAM: PRIM'S ALGORITHM (MINIMUM SPANNING TREE)
+# ============================================================
+# Prim's Algorithm is a Greedy Algorithm.
+# It always chooses the minimum weight edge
+# that connects a visited vertex to an unvisited vertex.
+
+
+import heapq                                   # Import heapq module (built-in priority queue / min heap)
+
+
+# ============================================================
+# FUNCTION TO FIND MST USING PRIM'S ALGORITHM
+# ============================================================
+def prim_mst(graph, start_vertex):             # Function takes weighted graph and starting vertex
+
+    visited = set()                            # Empty set to store visited vertices (unique only)
+
+    min_heap = []                              # Empty list used as min heap (priority queue)
+
+    mst = []                                   # Empty list to store MST edges
+
+    total_weight = 0                           # Variable to store total MST cost
+
+
+    visited.add(start_vertex)                  # Mark starting vertex as visited
+
+
+    # Add all edges of starting vertex into heap
+    for neighbor, weight in graph[start_vertex]:  # Loop through neighbors of start vertex
+
+        heapq.heappush(                        # Push edge into min heap
+            min_heap,                          # Heap name
+            (weight, start_vertex, neighbor)   # Tuple format: (weight, from, to)
+        )
+
+
+    # Continue until heap becomes empty
+    while min_heap:                            # Runs while heap contains edges
+
+
+        # Extract minimum weight edge
+        weight, u, v = heapq.heappop(min_heap)  # Removes smallest edge automatically
+
+
+        # If vertex already visited, skip it
+        if v in visited:                       # Prevent cycle formation
+            continue                           # Skip current iteration
+
+
+        # Mark new vertex as visited
+        visited.add(v)                         # Add vertex into visited set
+
+
+        # Add selected edge into MST
+        mst.append((u, v, weight))             # Store selected edge
+
+
+        # Add edge weight into total
+        total_weight += weight                 # Update total cost
+
+
+        print(f"Selected Edge: {(u, v, weight)}")  # Print selected edge
+
+
+        # Add all edges of newly visited vertex
+        for neighbor, edge_weight in graph[v]:    # Traverse neighbors of current vertex
+
+
+            # Only add unvisited vertices
+            if neighbor not in visited:        # Avoid revisiting same vertex
+
+                heapq.heappush(                # Insert edge into heap
+                    min_heap,
+                    (edge_weight, v, neighbor)
+                )
+
+
+    return mst, total_weight                   # Return MST edges and total cost
+
+
+
+
+# ============================================================
+# WEIGHTED GRAPH USING ADJACENCY LIST
+# ============================================================
+graph = {
+
+    'A': [('B', 1), ('C', 3)],               # A connected to B(weight=1), C(weight=3)
+
+    'B': [('A', 1),                          # B connected to A(weight=1)
+          ('C', 2),                          # B connected to C(weight=2)
+          ('D', 4)],                         # B connected to D(weight=4)
+
+    'C': [('A', 3),                          # C connected to A(weight=3)
+          ('B', 2),                          # C connected to B(weight=2)
+          ('D', 5)],                         # C connected to D(weight=5)
+
+    'D': [('B', 4),                          # D connected to B(weight=4)
+          ('C', 5)]                          # D connected to C(weight=5)
+}
+
+
+
+
+# ============================================================
+# CALL FUNCTION
+# ============================================================
+mst, weight = prim_mst(graph, 'A')           # Start Prim's from vertex A
+
+
+
+
+# ============================================================
+# PRINT FINAL RESULT
+# ============================================================
+print("\nMinimum Spanning Tree:", mst)       # Print selected MST edges
+
+print("Total Weight of MST:", weight)        # Print total cost
+
+
+
+
+# ============================================================
+# IMPORTANT CONCEPTS USED IN THIS PROGRAM
+# ============================================================
+
+# 1) GRAPH
+# Graph is a collection of vertices(nodes) and edges(connections).
+
+
+# 2) WEIGHTED GRAPH
+# Each edge has a weight/cost associated with it.
+
+
+# 3) ADJACENCY LIST
+# Graph representation where each vertex stores its neighbors.
+# Example:
+# A -> [(B,1), (C,3)]
+
+
+# 4) GREEDY ALGORITHM
+# Makes the best local choice at every step.
+# Prim always picks minimum available edge.
+
+
+# 5) MINIMUM SPANNING TREE (MST)
+# A tree connecting all vertices with:
+# - No cycles
+# - Minimum total edge weight
+# Number of edges = V-1
+
+
+# 6) SET()
+# Python built-in data structure.
+# Stores unique elements only.
+# Used to track visited vertices.
+
+
+# 7) visited.add(x)
+# Adds x into set.
+
+
+# 8) MIN HEAP
+# Data structure where smallest element stays at top.
+
+
+# 9) heapq
+# Python built-in module for heap operations.
+
+
+# 10) heapq.heappush(heap,item)
+# Inserts item into heap.
+
+
+# Example:
+# heap = []
+# heapq.heappush(heap,5)
+# heapq.heappush(heap,1)
+# heapq.heappush(heap,3)
+# heap becomes [1,5,3]
+
+
+# 11) heapq.heappop(heap)
+# Removes smallest element.
+
+
+# Example:
+# returns 1 first.
+
+
+# 12) TUPLE
+# Ordered immutable collection.
+# Example:
+# (1,'A','B')
+
+
+# Here:
+# weight = 1
+# from_vertex = A
+# to_vertex = B
+
+
+# 13) LIST
+# Ordered mutable collection.
+# Example:
+# mst = []
+
+
+# 14) continue
+# Skips current iteration and moves to next loop iteration.
+
+
+# 15) while loop
+# Runs until condition becomes False.
+
+
+# Example:
+# while min_heap:
+
+
+# 16) for loop
+# Used for traversal.
+
+
+# Example:
+# for neighbor, weight in graph['A']
+
+
+# 17) F-STRING
+# Used for formatted output.
+
+
+# Example:
+# print(f"Weight = {weight}")
+
+
+# 18) TIME COMPLEXITY
+# O(E log V)
+# E = number of edges
+# V = number of vertices
+
+
+# 19) SPACE COMPLEXITY
+# O(V + E)
+
+
+# 20) WHY PRIM IS GREEDY?
+# Because it always chooses minimum edge at each step.
+
+
+# 21) WHY SET IS USED?
+# To avoid revisiting vertices and prevent cycles.
+
+
+# 22) WHY HEAP IS USED?
+# To efficiently get minimum weight edge.
+
+
+# 23) WHY TUPLE IS USED IN HEAP?
+# Heap compares first element of tuple (weight),
+# so smallest weight automatically comes first.
