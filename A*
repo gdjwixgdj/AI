@@ -1,0 +1,207 @@
+# -----------------------------------------
+# A* Algorithm for 8 Puzzle Problem
+# -----------------------------------------
+
+import heapq
+
+
+# Goal state
+goal = [1, 2, 3, 4, 5, 6, 7, 8, 0]
+
+
+# Possible moves of blank tile
+moves = {
+    'U': -3,
+    'D': 3,
+    'L': -1,
+    'R': 1
+}
+
+
+# Class for each puzzle state
+class PuzzleState:
+
+    def __init__(self, board, parent, move, depth, cost):
+
+        self.board = board      # Current board
+        self.parent = parent    # Parent state
+        self.move = move        # Move made
+        self.depth = depth      # g(n)
+        self.cost = cost        # f(n)
+
+
+    # For priority queue comparison
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+
+
+# Heuristic function (Manhattan Distance)
+def heuristic(board):
+
+    distance = 0
+
+    for i in range(9):
+
+        if board[i] != 0:
+
+            x1, y1 = divmod(i, 3)
+
+            x2, y2 = divmod(board[i] - 1, 3)
+
+            distance += abs(x1 - x2) + abs(y1 - y2)
+
+    return distance
+
+
+
+# Move blank tile
+def move_tile(board, move, blank_pos):
+
+    new_board = board[:]
+
+    new_pos = blank_pos + moves[move]
+
+    # Swap
+    new_board[blank_pos], new_board[new_pos] = \
+        new_board[new_pos], new_board[blank_pos]
+
+    return new_board
+
+
+
+# A* Search
+def a_star(start_board):
+
+    open_list = []
+
+    closed_list = set()
+
+
+    start = PuzzleState(
+        start_board,
+        None,
+        None,
+        0,
+        heuristic(start_board)
+    )
+
+
+    heapq.heappush(open_list, start)
+
+
+    while open_list:
+
+
+        # Get state with minimum cost
+        current = heapq.heappop(open_list)
+
+
+        # Goal found
+        if current.board == goal:
+            return current
+
+
+        closed_list.add(tuple(current.board))
+
+
+        blank_pos = current.board.index(0)
+
+
+        # Try all moves
+        for move in moves:
+
+
+            # Invalid moves
+            if move == 'U' and blank_pos < 3:
+                continue
+
+            if move == 'D' and blank_pos > 5:
+                continue
+
+            if move == 'L' and blank_pos % 3 == 0:
+                continue
+
+            if move == 'R' and blank_pos % 3 == 2:
+                continue
+
+
+            new_board = move_tile(
+                current.board,
+                move,
+                blank_pos
+            )
+
+
+            if tuple(new_board) in closed_list:
+                continue
+
+
+            new_state = PuzzleState(
+                new_board,
+                current,
+                move,
+                current.depth + 1,
+                current.depth + 1 + heuristic(new_board)
+            )
+
+
+            heapq.heappush(
+                open_list,
+                new_state
+            )
+
+
+    return None
+
+
+
+# Print solution path
+def print_solution(solution):
+
+    path = []
+
+
+    while solution:
+
+        path.append(solution)
+
+        solution = solution.parent
+
+
+    path.reverse()
+
+
+    for step in path:
+
+        print("Move:", step.move)
+
+        board = step.board
+
+        for i in range(0, 9, 3):
+            print(board[i:i+3])
+
+        print()
+
+
+
+# Initial state
+start = [1, 2, 3,
+         4, 0, 5,
+         6, 7, 8]
+
+
+# Solve
+solution = a_star(start)
+
+
+# Print answer
+if solution:
+
+    print("Solution Found:\n")
+
+    print_solution(solution)
+
+else:
+
+    print("No Solution")
