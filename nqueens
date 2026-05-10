@@ -1,0 +1,274 @@
+# ==========================================
+# N-QUEEN PROBLEM USING BACKTRACKING
+# ==========================================
+
+# N means number of queens and board size (N x N)
+# Here N = 4 means 4 queens on 4x4 chessboard
+N = 4
+
+
+# ==========================================
+# FUNCTION TO PRINT FINAL BOARD
+# ==========================================
+def printSolution(board):
+
+    # Loop through all rows
+    for i in range(N):
+
+        # Loop through all columns
+        for j in range(N):
+
+            # Print each element of board
+            # 1 = Queen
+            # 0 = Empty space
+            print(board[i][j], end=" ")
+
+        # Move to next line after one row
+        print()
+
+
+# ==========================================
+# FUNCTION TO CHECK WHETHER POSITION IS SAFE
+# ==========================================
+def isSafe(board, row, col):
+
+    # --------------------------------------
+    # CHECK LEFT SIDE OF CURRENT ROW
+    # --------------------------------------
+    # We check only left side because
+    # queens are placed from left to right
+    for i in range(col):
+
+        # If queen already exists
+        if board[row][i] == 1:
+            return False
+
+
+    # --------------------------------------
+    # CHECK UPPER LEFT DIAGONAL
+    # --------------------------------------
+    # Start from current position
+    i = row
+    j = col
+
+    # Move diagonally upward-left
+    while i >= 0 and j >= 0:
+
+        # If queen found
+        if board[i][j] == 1:
+            return False
+
+        # Move one step diagonally
+        i -= 1
+        j -= 1
+
+
+    # --------------------------------------
+    # CHECK LOWER LEFT DIAGONAL
+    # --------------------------------------
+    # Again start from current position
+    i = row
+    j = col
+
+    # Move diagonally downward-left
+    while i < N and j >= 0:
+
+        # If queen found
+        if board[i][j] == 1:
+            return False
+
+        # Move one step diagonally
+        i += 1
+        j -= 1
+
+
+    # If all checks passed
+    # Position is safe
+    return True
+
+
+# ==========================================
+# MAIN RECURSIVE FUNCTION
+# ==========================================
+def solve(board, col):
+
+    # --------------------------------------
+    # BASE CONDITION
+    # --------------------------------------
+    # If all queens are placed
+    if col >= N:
+        return True
+
+
+    # --------------------------------------
+    # TRY EACH ROW IN CURRENT COLUMN
+    # --------------------------------------
+    for i in range(N):
+
+        # Check whether queen can be placed
+        if isSafe(board, i, col):
+
+            # Place queen
+            board[i][col] = 1
+
+
+            # Recursively place queen
+            # in next column
+            if solve(board, col + 1):
+                return True
+
+
+            # ----------------------------------
+            # BACKTRACKING
+            # ----------------------------------
+            # If solution not found,
+            # remove queen
+            board[i][col] = 0
+
+
+    # If no row works
+    return False
+
+
+# ==========================================
+# CREATE EMPTY BOARD
+# ==========================================
+# Creates:
+# 0 0 0 0
+# 0 0 0 0
+# 0 0 0 0
+# 0 0 0 0
+board = [[0] * N for _ in range(N)]
+
+
+# ==========================================
+# START SOLVING FROM COLUMN 0
+# ==========================================
+if solve(board, 0):
+
+    # If solution found
+    print("Solution Found:\n")
+    printSolution(board)
+
+else:
+
+    # If no solution exists
+    print("No Solution")
+
+
+
+# ==========================================
+# IMPORTANT VIVA QUESTIONS AND ANSWERS
+# ==========================================
+
+# Q1. What is N-Queen Problem?
+# Ans:
+# It is a problem of placing N queens
+# on an NxN chessboard such that
+# no queen attacks another queen.
+
+
+# Q2. Which technique is used?
+# Ans:
+# Backtracking.
+
+
+# Q3. Why backtracking is used?
+# Ans:
+# If one choice fails,
+# we go back and try another choice.
+
+
+# Q4. What does isSafe() function do?
+# Ans:
+# It checks whether queen placement
+# is safe or not.
+
+
+# Q5. Which directions are checked?
+# Ans:
+# 1. Left row
+# 2. Upper left diagonal
+# 3. Lower left diagonal
+
+
+# Q6. Why right side is not checked?
+# Ans:
+# Because queens are placed
+# from left to right.
+
+
+# Q7. Why column checking is not needed?
+# Ans:
+# Because only one queen
+# is placed in each column.
+
+
+# Q8. What is recursion?
+# Ans:
+# When a function calls itself.
+
+
+# Example:
+# solve(board, col + 1)
+
+
+# Q9. What is base condition?
+# Ans:
+# if col >= N
+
+
+# Q10. What is backtracking line?
+# Ans:
+# board[i][col] = 0
+
+
+# Q11. What does 1 represent?
+# Ans:
+# Queen
+
+
+# Q12. What does 0 represent?
+# Ans:
+# Empty space
+
+
+# Q13. Time Complexity?
+# Ans:
+# O(N!)
+
+
+# Q14. Space Complexity?
+# Ans:
+# O(N²)
+
+
+# Q15. Can N=2 or N=3 have solution?
+# Ans:
+# No
+
+
+# Q16. Can N=4 have solution?
+# Ans:
+# Yes
+
+
+# Q17. What happens if no safe position found?
+# Ans:
+# Function returns False.
+
+
+# Q18. What is board?
+# Ans:
+# 2D list representing chessboard.
+
+
+# Q19. Why use [[0]*N for _ in range(N)] ?
+# Ans:
+# To create NxN empty board.
+
+
+# Q20. What does solve(board,0) mean?
+# Ans:
+# Start placing queens
+# from first column.
