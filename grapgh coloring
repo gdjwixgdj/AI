@@ -1,0 +1,143 @@
+# ==========================================
+# GRAPH COLORING USING GREEDY ALGORITHM
+# ==========================================
+
+
+# Adjacency Matrix of graph
+# 1 means connection (edge exists)
+# 0 means no connection
+G = [
+
+    # a  b  c  d  e  f
+    [0, 1, 1, 0, 1, 0],  # a
+    [1, 0, 1, 1, 0, 1],  # b
+    [1, 1, 0, 1, 1, 0],  # c
+    [0, 1, 1, 0, 0, 1],  # d
+    [1, 0, 1, 0, 0, 1],  # e
+    [0, 1, 0, 1, 1, 0]   # f
+]
+
+
+# Names of vertices
+# index 0 = a
+# index 1 = b
+# index 2 = c
+# index 3 = d
+# index 4 = e
+# index 5 = f
+node = "abcdef"
+
+
+# Available colors
+colors = ["Blue", "Red", "Yellow", "Green"]
+
+
+# Dictionary to store final answer
+# Example:
+# {'a':'Blue'}
+solution = {}
+
+
+# ==========================================
+# CHECK EACH NODE ONE BY ONE
+# ==========================================
+for i in range(len(G)):
+
+
+    # Store colors already used
+    # by neighboring vertices
+    used = []
+
+
+    # Check all neighbors
+    for j in range(len(G)):
+
+
+        # If edge exists AND neighbor is already colored
+        if G[i][j] == 1 and node[j] in solution:
+
+
+            # Store neighbor color
+            used.append(solution[node[j]])
+
+
+    # Try colors one by one
+    for color in colors:
+
+
+        # If color not used by neighbors
+        if color not in used:
+
+
+            # Assign color
+            solution[node[i]] = color
+
+
+            # Stop checking more colors
+            break
+
+
+# ==========================================
+# PRINT FINAL SOLUTION
+# ==========================================
+for n in solution:
+
+    print("Node", n, "=", solution[n])
+
+
+
+# ==========================================
+# IMPORTANT VIVA QUESTIONS
+# ==========================================
+
+# Q1. What is graph coloring?
+# Ans:
+# Assign colors to vertices such that
+# no adjacent vertices have same color.
+
+
+# Q2. Which algorithm is used?
+# Ans:
+# Greedy Algorithm.
+
+
+# Q3. Why greedy?
+# Ans:
+# Because we choose first available color
+# at every step.
+
+
+# Q4. What is adjacency matrix?
+# Ans:
+# Matrix representation of graph.
+
+
+# Q5. What does 1 mean?
+# Ans:
+# Edge exists.
+
+
+# Q6. What does 0 mean?
+# Ans:
+# No edge.
+
+
+# Q7. Why diagonal is 0?
+# Ans:
+# Node is not connected to itself.
+
+
+# Q8. What is solution dictionary?
+# Ans:
+# Stores node and assigned color.
+
+
+# Q9. What is used list?
+# Ans:
+# Stores colors already used
+# by neighboring nodes.
+
+
+# Q10. Time complexity?
+# Ans:
+# O(V²)
